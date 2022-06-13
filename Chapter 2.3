@@ -1,0 +1,10 @@
+3. The force unwrap operator is to remove the option to return a nil value.  
+
+
+4. pub fun main? () {   
+    var s: {String: UInt64} = {"YouTube": 6, "Instagram": 5, "LinkedIn": 4, 
+    "Facebook": 3, "Redit": 1, "Twitter": 0}
+    return[Redit]!
+
+
+The error means that you must return an optional type in case a key value is missing.  You have two options-make the array "thing" an optional type or unwrap the array.
