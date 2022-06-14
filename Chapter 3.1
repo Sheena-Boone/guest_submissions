@@ -1,0 +1,21 @@
+1)	However, Resources cannot be copied, lost or overwritten.  They cannot be created  whenever you want and my be explicit in how it is handled. It is this reason why Resouces is the pillar of Flow.  Resources are types that can only exit in one loction and used exactly once
+
+2)	A resource would be better to than a struct because it better to prevent data in the user's account from being overwritten and from used more than once. 
+
+3)	The keyword to make new resourse is create
+
+4) 	A resource would not be created in a script or transaction.  A resouce is used as a container for a user's account.  This occurs in the smart contract and not a container.  A transaction or a script interacts with the smart contract on the blockchain. 
+
+5) 	The resource is of type Jacob
+
+ 6)	pub fun createJacob(): Jacob { 
+
+/* Jacob is a resourse if it going to be assigned to a function you need the @ symbol in front of Jacob */
+
+        let myJacob = Jacob() // there are 2 here
+/* Coping a resource is not allowed. This is also invalid because you cannot use to an equal sign to assign Jacob to myJacob.  You have to assign a resource to another variable you must use the move operator (<-)*/
+
+        return myJacob // there is 1 here
+/* To return the resource using the move operator
+    }
+}
