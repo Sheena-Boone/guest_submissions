@@ -1,0 +1,107 @@
+s. An event is an contract notification system.  Emits are placed in different parts of the contract to to let the account holder know that a transaction within thier account has occured. 
+
+2 & 3.
+ pub contract resCondition{
+  //Events common practice is to have event at the beginning of contract 
+  pub event greetingCreated(hash: UInt64)  
+
+  pub resource interface IGreeting {
+    pub fun prechangeGreeting(newGreeting: String){
+      pre{
+        newGreeting != "Hello, Jacob!": "This is Jacob saying Hello"
+      }
+    }
+
+    pub fun postchangeGreeting(newGreeting: String) {
+      post{
+        newGreeting != "Goodbye Jacob!": "This is Jacob signing off"
+      }
+    }
+  }
+
+
+  pub resource Greeting: IGreeting {
+    
+    pub var greeting: String
+    pub var hash: UInt64
+    
+    pub fun prechangeGreeting(newGreeting: String){
+      
+      self.greeting = newGreeting
+    }
+
+    pub fun postchangeGreeting(newGreeting: String){
+      
+      self.greeting = newGreeting
+    }
+
+    init(){
+      self.hash = self.uuid
+      self.greeting = "Hello World"
+    }
+  }
+
+  pub fun createGreeting(): @Greeting {
+    let greet <- create Greeting()
+    emit greetingCreated(hash: greet.hash)
+    return <- greet
+  }
+}
+
+4. pub contract Test {
+
+  // TODO
+  // Tell me whether or not this function will log the name.
+  // name: 'Jacob'
+  // Jacob is logged because log(name) is executed when you run the function
+  // numberOne
+  pub fun numberOne(name: String) {
+    pre {
+      name.length == 5: "This name is not cool enough."
+    }
+    log(name)
+  }
+
+  // TODO
+  // Tell me whether or not this function will return a value.
+  // name: 'Jacob'
+
+  //A value is not returned because the name "Jacob" does not meet the conditions
+  //of result
+
+  pub fun numberTwo(name: String): String {
+    pre {
+      name.length >= 0: "You must input a valid name."
+    }
+    post {
+      result == "Jacob Tucker"
+    }
+    return name.concat(" Tucker")
+  }
+
+  pub resource TestResource {
+    pub var number: Int
+
+    // TODO
+    // Tell me whether or not this function will log the updated number.
+    // Also, tell me the value of `self.number` after it's run.
+
+    //before statement is performed before the function is called therefore the
+    //logged number will initially be zero. After the function is complete the
+    //number will be incremented by 1 and the output will be one
+
+    pub fun numberThree(): Int {
+      post {
+        before(self.number) == result + 1
+      }
+      self.number = self.number + 1
+      return self.number
+    }
+
+    init() {
+      self.number = 0
+    }
+
+  }
+
+}
