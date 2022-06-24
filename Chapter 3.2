@@ -1,0 +1,184 @@
+1. You cannot put resources inside a struct. 
+
+2. You can store a resource in the following
+⦁	Inside a dictionary or array
+⦁	Inside another resource
+⦁	As a contract state variable
+⦁	Inside account storage (we will talk about this later)
+
+
+3. pub contract FairTrade {
+
+    pub var arrayOfRegulations: @[Rules]
+
+    pub resource rules{
+        pub let rule: String
+        init() {
+            self.message = "Must be given permission by user"
+        }
+    }
+
+    pub fun addRules(rule: @Rules) {
+        self.arrayOfRugulations.append(<- rule)
+    }
+
+    pub fun removeGreeting(index: Int): @Greeting {
+        return <- self.arrayOfGreetings.remove(at: index)
+    }
+
+    init() {
+        self.arrayOfGreetings <- []
+    }
+
+}
+
+pub contract NFT  {
+  pub var dictionaryofNFTInfo: @{String: NFTData}
+   
+  // Create a dictionary where String is matched with a resource. 
+  init(){
+    self.dictionaryofNFTInfo<-{}
+  //Iniitialize the dictionary
+}
+
+  pub resource NFTData{
+    pub let artist: String
+    init(){
+      self.artist ="Michael Rodriguez"
+      }
+  }
+
+pub fun addNFTData(artist_data: @NFTData){
+  let key = artist_data.artist
+  let oldArtist <- self.dictionaryofNFTInfo[key] <-artist
+  //put a new resource in a new key and put in oldArtist
+  
+destroy oldArtist
+//destroy resource
+  }
+
+pub fun removeGreeting(key: String): @Greeting{
+  let greeting<-self.dictionaryofGreetings.remove(key: key)!
+  return <- greeting
+  }
+}
+  //The force-move operator <-! basically means: "If there is already a value at the destination, panic and abort the program. Otherwise, put it there."
+  }
+}
+
+
+
+pub contract Test {
+
+//Create an array Greetings of type resource. This is assigned to variable arrayofGreetings
+    
+     pub var arrayOfGreetings: @[Greeting]
+
+    //The initial message is "Hello, Mars
+    pub resource Greeting {
+        pub let message: String
+        init() {
+            self.message = "Hello, Mars!"
+        }
+    }
+    //Append to an array 
+        pub fun addGreeting(greeting: @Greeting) {
+        self.arrayOfGreetings.append(<- greeting)
+    }
+    
+    //Remove an element of type resource from the array
+        pub fun removeGreeting(index: Int): @Greeting {
+        return <- self.arrayOfGreetings.remove(at: index)
+    }
+
+    init() {
+    //initialize empty array arrayOfGreetings. This is how you initialize an array of 
+        self.arrayOfGreetings <- []
+    }
+
+}
+
+
+//Resource as a dictionary (Method 1: Easiest but Strict)
+pub contract Test {
+
+    pub var dictionaryOfGreetings: @{String: Greeting} 
+//Defining dictionaryOfGreetings mapping a string to a resource
+
+//Greeting is a resource and has a container with the message "Hello, Mars!"
+    pub resource Greeting {
+        pub let message: String
+        init() {
+            self.message = "Hello, Mars!"
+        }
+    }
+    /*The easiest way to add a resource to a dictionary is by using the "force-move" operator <-!, like so:*/
+
+    pub fun addGreeting(greeting: @Greeting) {
+        let key = greeting.message
+        self.dictionaryOfGreetings[key] <-! greeting
+    }
+
+//Define an empty dictionary
+    init() {
+        self.dictionaryOfGreetings <- {}
+    }
+}
+
+//Resource as a dictionary (Method 2: Complicated, but Handle Duplicates)
+
+pub contract Test {
+
+    pub var dictionaryOfGreetings: @{String: Greeting}
+
+    pub resource Greeting {
+        pub let message: String
+        init() {
+            self.message = "Hello, Mars!"
+        }
+    }
+
+    pub fun addGreeting(greeting: @Greeting) {
+        let key = greeting.message
+        
+        let oldGreeting <- self.dictionaryOfGreetings[key] <- greeting
+        destroy oldGreeting
+    }
+
+    init() {
+        self.dictionaryOfGreetings <- {}
+    }
+}
+
+//Removing a key from a dictionary
+
+pub contract Test {
+
+    pub var dictionaryOfGreetings: @{String: Greeting}
+
+    pub resource Greeting {
+        pub let message: String
+        init() {
+            self.message = "Hello, Mars!"
+        }
+    }
+
+    pub fun addGreeting(greeting: @Greeting) {
+        let key = greeting.message
+        
+        let oldGreeting <- self.dictionaryOfGreetings[key] <- greeting
+        destroy oldGreeting
+    }
+
+    pub fun removeGreeting(key: String): @Greeting {
+        let greeting <- self.dictionaryOfGreetings.remove(key: key) ?? panic("Could not find the greeting!")
+        //or 
+        //let greeting <-self. dictionaryOfGreetings.remove(key: key)!
+        return <- greeting
+    }
+
+    init() {
+        self.dictionaryOfGreetings <- {}
+    }
+
+}
