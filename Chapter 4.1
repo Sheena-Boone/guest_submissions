@@ -1,0 +1,79 @@
+An account is segmented into two parts Contract code and Acount Storage
+	Contact code - the contract gets deployed. The guidelines (rules) of the smart contract. You can have multiple contracts in the contract code
+	Account storage - Segmented into three parts - 
+		storage - all of your data lives here;only owner can access this using AuthAccount. Can only be ever accessed in the prepare phase of trasaction (What is meant by phase?)	
+		public and and private paths are pointers to stoarage
+		public  - available to everyone  and be accessed anywhere; all you need is the account address. 
+		private - only available to the account holder and only those the account owner gives access to.
+
+	The account holder can place data in the public and private section.  
+The owner would access storage location though the AuthAccount (This is where the owner would authorize her / his signature for a transaction) 
+
+transaction() {
+  prepare(signer: AuthAccount) {
+    // We can access the signer's /storage/ path here!
+  }
+
+  execute {
+
+  }
+}
+
+Example of storing information in storage 
+
+pub contract Stuff{
+	pub resouce Test {
+		pub var name: String
+		init ()  {
+			self.name = "Jacob"
+		}
+	}
+	pub fun createTest(): @Test {
+		return <-create Test()
+	}
+}
+
+import Stuff from 0x01
+/*You're importing the contract from 0x01 but you can assign this contract other transaction signers */
+transaction (){
+	prepare(signer: AuthAccount){
+	//An AuthAccount that will allow the authorization of saving information
+		let testResouce <-Stuff.createTest()
+		signer.save(<-testResource, to: /storage/MyTestResource)
+		//only one thing can exist in a storage path at one time.  You can send it more //than it more than once. You can overwrite things
+		//.save takes two parmerters
+		//The actual data to save
+		//a to parameter that is the path we should save it to 
+		//(it must be a /storage/ path)
+		
+		//This would be if we wanted to destroy a resource
+		//destroy testResource
+		}
+		execute{
+			log("Stored Greeting Resource.")
+		}
+	}
+}
+
+To access the storage path
+import Stuff from  0x 01
+transaction(){
+	prepare(signer:  AuthAccount {
+		let testResource = acct. borrow<&Stuff.Test>(from: /storage/MyTestResource)
+	?? panic ("We could not borror the resouce")
+	//This is a clear explanation of what is happening
+
+		//You're borrow a reference to the resource; the resouce is still in storage
+		log(testResource.createTest)
+
+		}
+
+		execute {
+		}
+	}
+
+1. An account is seperated into two segments.  The contract code and the account storage.  The contract code stores the rules regarding the transaction between the account and the blockchain. The account storage stores information about the account and account user.
+
+2. Storage is private information that is only accessible by the user. This segment has the accounting authorized signature. Public his accessible to everyone and has information regarding the transaction.   Private is only accessible to the user and whom ever the account gives access to.  Private and Public are pointers to Storage.
+
+3. .save() saves data to the storage path.  load() removes storage from the storage path.  borrows allow you access information from storage by using a reference
