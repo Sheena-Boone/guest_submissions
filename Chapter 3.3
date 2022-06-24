@@ -1,0 +1,31 @@
+
+pub contract mental{
+  pub var dictionaryofmentalDiseases: @{String: illness}
+  
+ 1.  init(){
+    self.dictionaryofMentalDiseases<- {
+      "Bipolar": <- create illness(_type: "Depression"),
+      "Dementia": <- create illness(_type: "Memory")
+    }
+  }
+
+  pub resource illness {
+    pub let type: String
+    init(_type: String) {
+      self.type = _type
+    }
+  }
+
+  pub fun getReference(key: String): &illness {
+    return (&self.dictionaryofMentalDiseases[key] as &illness?)!
+  }
+}
+
+2.import mental from 0x03
+
+pub fun main(): String {
+  let ref = mental.getReference(key: "Dementia")
+  return ref.type
+}
+
+3 References are useful refer to the value of a resouce without having to move them around.   This prevents the developer from creating several variables to obtain the value of a resource
