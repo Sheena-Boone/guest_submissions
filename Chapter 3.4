@@ -1,0 +1,43 @@
+1. Resource interfaces can be used to restrict information that is not pertinent to the contract.   Also used to implement rules that are needed to perform specific tasks. 
+
+3. access(all) contract Stuff {
+
+  pub struct interface ITest {
+    pub var greeting: String
+    pub var favouriteFruit: String
+
+    //access(contract) fun changeGreeting(newGreeting: String)
+    pub fun changeGreeting(newGreeting: String): String
+    }
+
+    // ERROR:
+    // `structure Stuff.Test does not conform 
+    // to structure interface Stuff.ITest
+
+// To fix this problem make sure the variables and fuctions in the Struct are also in the interface
+    
+    pub struct Test:ITest{
+      pub var greeting: String
+      pub var favouriteFruit: String
+
+      pub fun changeGreeting(newGreeting: String): String {
+        self.greeting = newGreeting
+        return self.greeting // returns the new greeting
+      }
+
+    init(){
+      self.greeting = "Hello"
+      self.favouriteFruit = "Grapes"
+    }
+   
+   pub fun fixThis() {
+      let test: Test{ITest} = Test()
+      let newGreeting = test.changeGreeting(newGreeting: "Bonjour!") // ERROR HERE: `member of restricted type is not accessible: changeGreeting`
+      log(newGreeting)
+//This was not part of the struct inteface
+    }
+   }
+  
+
+}
+
