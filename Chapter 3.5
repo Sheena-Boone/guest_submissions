@@ -1,0 +1,23 @@
+Chapter 3.5
+
+pub(set) var a: String 
+var a can be accessed and modified in all areas because it set it pub(set)
+
+pub var b: String
+var b can be accessed in all locations however, it can only be modified in AREA 1 becaue that is the area for which it is defined
+
+access(contract) var c: String
+var c can be accessed in only in Area 3; This area is considered part of the contract
+
+access(self) var d: String
+var d can only be accessed in Area 1 because ths is the area where it is defined 
+
+pub fun publicFunc() {}
+publicFunc can be accessed it all areas because pub fun is unrestricted
+
+access(contract) fun contractFunc() {}
+contractFunc can be accessed in Area 2 and Area 3 because they are part of the contract area.
+
+access(self) fun privateFunc() {}
+privateFunc can only be accessed in Area 1 because it is part of the struct for which it is define. 
+
